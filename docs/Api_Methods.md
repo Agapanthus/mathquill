@@ -148,6 +148,13 @@ Returns the contents as LaTeX.
 
 This will render the argument as LaTeX in the MathQuill instance.
 
+## .setSelection(startPoint, endPoint)
+
+Selects the contents using points in the page's coordinate system.  This simulates a mouse start and end selection.
+
+## .clearSelection()
+
+Clears the selection.  This may be a mouse selection via `setSelection` or a cursor selection (`select`) in an Editable MathField.
 
 
 # Editable MathField methods
@@ -181,10 +188,6 @@ mathField.cmd('\\sqrt'); // writes a square root command at the cursor position
 ## .select()
 
 Selects the contents (just like [on `textarea`s](http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-48880622) and [on `input`s](http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-34677168)).
-
-## .clearSelection()
-
-Clears the selection.
 
 ## .moveToLeftEnd(), .moveToRightEnd()
 
@@ -225,6 +228,14 @@ mathField.typedText('x=-b\\pm \\sqrt b^2 -4ac');
 
 Changes the [configuration](Config.md) of just this math field.
 
+## makeStatic() (\\MathQuillMathField only)
+
+Converts the editable inner field into a static one.
+
+## makeEditable()  (\\MathQuillMathField only)
+
+Converts the static inner field into an editable one.
+
 ## .dropEmbedded(pageX, pageY, options) **[ᴇxᴘᴇʀɪᴍᴇɴᴛᴀʟ](#note-on-experimental-features)**
 
 Insert a custom embedded element at the given coordinates, where `options` is an object like:
@@ -243,3 +254,15 @@ Allows MathQuill to parse custom embedded objects from latex, where `options` is
 ## Note on Experimental Features
 
 Methods marked as experimental may be altered drastically or removed in future versions. They may also receive less maintenance than other non-experimental features.
+
+# Inner MathField methods
+
+Inner math fields have all of the [above](#editable-mathfield-methods) methods in addition to the ones listed here.
+
+## makeStatic()
+
+Converts the editable inner field into a static one.
+
+## makeEditable()
+
+Converts the static inner field into an editable one.

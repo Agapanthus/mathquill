@@ -3,6 +3,7 @@
 The configuration options object is of the following form:
 ```js
 {
+  tabAction: 'escapeAndOut', // or 'escapeAndNextTemplate'
   spaceBehavesLikeTab: true,
   leftRightIntoCmdGoes: 'up',
   restrictMismatchedBrackets: true,
@@ -14,6 +15,10 @@ The configuration options object is of the following form:
   autoOperatorNames: 'sin cos',
   substituteTextarea: function() {
     return document.createElement('textarea');
+  },
+  strictOperatorSelection: {
+    prefixOperators: [‘-‘, ‘\\pm ‘],
+    binaryOperators: [‘+’, ‘=‘]
   },
   handlers: {
     edit: function(mathField) { ... },
@@ -31,11 +36,17 @@ Global defaults may be set with [`MQ.config(global_config)`](Api_Methods.md#mqco
 
 # Configuration Options
 
+## tabAction
+
+`tabAction` configures the way MathQuill responds to Tab.  By default (`escapeAndOut`), {Shift-,}Tab will escape out of a template until it reaches the root block.  At that point MathQuill ignores the keystroke and allows the default browser behavior to occur.  The `escapeAndNextTemplate` approach similarly escapes out of templates, but when reaching the root block, the next {Shift-,}Tab will find the next template in the desired direction.  If there are no such templates, then MathQuill allows the default browser behavior to occur.
+
 ## spacesBehavesLikeTab
 
 If `spaceBehavesLikeTab` is true the keystrokes `{Shift-,}Spacebar` will behave like `{Shift-,}Tab` escaping from the current block (as opposed to the default behavior of inserting a Space character).
 
 The animated demo on <mathquill.com> has this behavior.
+
+ If `spaceBehavesLikeTab` is `'exceptRootBlock'` the keystrokes will behave as true for all blocks that are not the root block.  The root block will simply continue to add spaces and not allow space to escape.  This option allows the entering of mixed fractions in the root block, where true does not.
 
 ## leftRightIntoCmdGoes
 
@@ -87,6 +98,9 @@ Just like [`autoCommands`](#autocommands) above, this takes a string formatted a
 
 For example, [Desmos](https://www.desmos.com/calculator) substitutes `<span tabindex=0></span>` on iOS to suppress the built-in virtual keyboard in favor of a custom math keypad that calls the MathQuill API. Unfortunately there's no universal [check for a virtual keyboard](http://stackoverflow.com/q/2593139/362030) or [way to detect a touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/), and even if you could, a touchscreen ≠ virtual keyboard (Windows 8 and ChromeOS devices have both physical keyboards and touchscreens and iOS and Android devices can have Bluetooth keyboards). Desmos currently sniffs the user agent for iOS, so Bluetooth keyboards just don't work in Desmos on iOS. The tradeoffs are up to you.
 
+## strictOperatorSelection
+
+`strictOperatorSelection` allows a user specify operators that they want to bind to their operands during selection. When making a cursor selection, a selected prefix operator will include its right sibling in the selection, and a selected binary operator will include its left and right siblings in the selection. This approach to selection can enforce an idea of "mathematically meaningful selection," that is, that operators should include their operands in a selection so the selection includes a representation of their role in the mathematical context.
 
 
 # Handlers
